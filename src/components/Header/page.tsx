@@ -41,7 +41,7 @@ export default function Comp() {
                     <span className={cx("name-page")}>Trang chủ</span>
                     {/* <span className={cx("name-page")}>Z.Personal</span> */}
                 </div>
-                <div className={cx("fearures")}>
+                <div className={cx("features")}>
                     {user ? (
                         <>
                             <div className={cx("user")}>
