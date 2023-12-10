@@ -1,0 +1,41 @@
+@import "/styles/variables.module.scss";
+
+:root {
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    max-width: 100vw;
+    overflow: overlay;
+    background-color: $body-color !important;
+    color: $text-color !important;
+}
+
+body {
+    height: 3000px;
+    padding: $wraper-padding;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: $primary-color;
+}
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: $body-color;
+}
