@@ -1,4 +1,4 @@
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { FaArrowRight, FaCircleInfo, FaFacebookF, FaGoogle, FaKey, FaUser } from "react-icons/fa6";
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
@@ -16,13 +16,17 @@ interface Props {
 function Signin({ setUser, formOut, setShowForm }: Props) {
     const [uname, setUName] = useState<string>("");
     const [upass, setUPass] = useState<string>("");
+    const [repass, setRePass] = useState<string>("");
 
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
     const [previewLastname, setPreviewLastname] = useState<string>("Last Name");
 
+    const unameRef = useRef<HTMLInputElement>(null);
+    const upassRef = useRef<HTMLInputElement>(null);
+    const rePassRef = useRef<HTMLInputElement>(null);
+
     const Handle_Signin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(uname + "--" + upass);
 
         // fetch("http://localhost:7777/users/signin", {
         //     method: "POST",
@@ -42,13 +46,28 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
 
         //         // console.log(data);
         // setUser(data?.user);
-        setUser({ last_name: "Vũ Nguyễn" });
-        setShowForm(false);
+        // setUser({ last_name: "Vũ Nguyễn" });
+        // setShowForm(false);
         //     });
     };
 
     const Handle_Signup = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!Validator()) {
+            rePassRef.current?.setCustomValidity("Mật khẩu nhập lại không khớp!");
+        }
+    };
+
+    const Validator = () => {
+        if (upass != repass) return false;
+        return true;
+    };
+
+    const handleLockspace = (e: { key: string; preventDefault: () => void }) => {
+        if (e.key === " ") {
+            e.preventDefault();
+        }
     };
 
     return (
@@ -69,14 +88,30 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                                     <FaUser />
                                     Tên đăng nhập
                                 </label>
-                                <input type="text" placeholder="Username" onChange={(e) => setUName(e.target.value)} required />
+                                <input
+                                    ref={unameRef}
+                                    type="text"
+                                    placeholder="Username (Max: 20 characters)"
+                                    maxLength={20}
+                                    onKeyDown={handleLockspace}
+                                    onChange={(e) => setUName(e.target.value)}
+                                    required
+                                />
                             </div>
                             <div className={cx("form__signin-group")}>
                                 <label>
                                     <FaKey />
                                     Mật khẩu
                                 </label>
-                                <input type="password" placeholder="⁕⁕⁕⁕⁕⁕⁕⁕" onChange={(e) => setUPass(e.target.value)} required />
+                                <input
+                                    ref={upassRef}
+                                    type="password"
+                                    placeholder="⁕⁕⁕⁕⁕⁕⁕⁕ (Max: 20 characters)"
+                                    maxLength={20}
+                                    onKeyDown={handleLockspace}
+                                    onChange={(e) => setUPass(e.target.value)}
+                                    required
+                                />
                             </div>
                             <Button type="submit" variant="outline-success">
                                 Đăng nhập
@@ -99,7 +134,13 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                                 <FaCircleInfo />
                                 Tên người dùng
                             </label>
-                            <input type="text" placeholder="Lastname" onChange={(e) => setPreviewLastname(e.target.value)} required />
+                            <input
+                                type="text"
+                                placeholder="Lastname (Max: 30 characters)"
+                                maxLength={30}
+                                onChange={(e) => setPreviewLastname(e.target.value)}
+                                required
+                            />
                             <div className={cx("preview")}>
                                 <div className={cx("preview__cover")}></div>
                                 <div className={cx("preview__img")}></div>
@@ -111,21 +152,46 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                                 <FaUser />
                                 Tên đăng nhập
                             </label>
-                            <input type="text" placeholder="Username" onChange={(e) => setUName(e.target.value)} required />
+                            <input
+                                ref={unameRef}
+                                type="text"
+                                placeholder="Username (Max: 20 characters)"
+                                maxLength={20}
+                                onKeyDown={handleLockspace}
+                                onChange={(e) => setUName(e.target.value)}
+                                required
+                            />
                         </div>
                         <div className={cx("form__signin-group")}>
                             <label>
                                 <FaKey />
                                 Mật khẩu
                             </label>
-                            <input type="password" placeholder="⁕⁕⁕⁕⁕⁕⁕⁕" onChange={(e) => setUPass(e.target.value)} required />
+                            <input
+                                ref={upassRef}
+                                type="password"
+                                placeholder="⁕⁕⁕⁕⁕⁕⁕⁕ (Max: 20 characters)"
+                                maxLength={20}
+                                onKeyDown={handleLockspace}
+                                onChange={(e) => setUPass(e.target.value)}
+                                required
+                            />
                         </div>
                         <div className={cx("form__signin-group")}>
                             <label>
                                 <FaKey />
-                                Xác nhận Mật khẩu
+                                Nhập lại mật khẩu
                             </label>
-                            <input type="password" placeholder="⁕⁕⁕⁕⁕⁕⁕⁕" onChange={(e) => setUPass(e.target.value)} required />
+                            <input
+                                ref={rePassRef}
+                                type="password"
+                                placeholder="⁕⁕⁕⁕⁕⁕⁕⁕ (Max: 20 characters)"
+                                maxLength={20}
+                                onKeyDown={handleLockspace}
+                                onChange={(e) => setRePass(e.target.value)}
+                                onKeyUp={Validator}
+                                required
+                            />
                         </div>
                         <Button type="submit" variant="outline-warning">
                             Đăng ký
