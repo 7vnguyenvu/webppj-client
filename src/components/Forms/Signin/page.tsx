@@ -11,11 +11,12 @@ const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
 interface Props {
     setUser: Dispatch<SetStateAction<User | undefined>>;
+    setUserAvatar: Dispatch<SetStateAction<string>>;
     formOut: boolean;
     setShowForm: Dispatch<SetStateAction<boolean>>;
 }
 
-function Signin({ setUser, formOut, setShowForm }: Props) {
+function Signin({ setUser, setUserAvatar, formOut, setShowForm }: Props) {
     const [uname, setUName] = useState<string>("");
     const [upass, setUPass] = useState<string>("");
     const [repass, setRePass] = useState<string>("");
@@ -66,6 +67,7 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                     .then((user) => {
                         // console.log(user);
                         setUser(user);
+                        setUserAvatar(user?.images?.avatar[0]?.url);
                         setShowForm(false);
                     });
             });
