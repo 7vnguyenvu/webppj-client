@@ -41,7 +41,6 @@ export default function Comp() {
     function onMouseOutDelay() {
         timeoutId = setTimeout(() => {
             setShowTooltip(false);
-            setTargetTooltip(null);
         }, 500);
     }
 
