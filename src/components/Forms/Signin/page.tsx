@@ -3,9 +3,11 @@ import { FaArrowRight, FaCircleInfo, FaFacebookF, FaGoogle, FaKey, FaUser } from
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
 import { User } from "../../../../declares/interfaces";
-import { Button } from "react-bootstrap";
+import { Button, Toast, ToastContainer } from "react-bootstrap";
+import { timePassed } from "../../../../services/timepassed";
 
 const cx = classNames.bind(styles);
+const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
 interface Props {
     setUser: Dispatch<SetStateAction<User | undefined>>;
@@ -19,7 +21,12 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
     const [repass, setRePass] = useState<string>("");
 
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
-    const [previewLastname, setPreviewLastname] = useState<string>("Last Name");
+    const [previewLastname, setPreviewLastname] = useState<string>("Your Name");
+
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [bkgToast, setBkgToast] = useState<string>("");
+    const [titleToast, setTitleToast] = useState<string>("");
+    const [messageToast, setMessageToast] = useState<string>("");
 
     const unameRef = useRef<HTMLInputElement>(null);
     const upassRef = useRef<HTMLInputElement>(null);
@@ -28,40 +35,80 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
     const Handle_Signin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // fetch("http://localhost:7777/users/signin", {
-        //     method: "POST",
-        //     headers: {
-        //         "content-type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         account: uname,
-        //         password: upass,
-        //     }),
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         if (data?.token) {
-        //             localStorage.setItem("access-token", "Bearer " + data?.token);
-        //         }
+        fetch(`${ServerPath}/accounts/signin`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                username: uname,
+                password: upass,
+            }),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                // console.log(res);
 
-        //         // console.log(data);
-        // setUser(data?.user);
-        // setUser({ last_name: "Vũ Nguyễn" });
-        // setShowForm(false);
-        //     });
+                if (res?.status != 200) {
+                    setBkgToast("danger");
+                    setTitleToast("Thất bại");
+                    setMessageToast(res?.message);
+                    setShowToast(true);
+                    return;
+                }
+
+                if (res?.account) {
+                    localStorage.setItem("account", JSON.stringify(res?.account));
+                }
+
+                fetch(`${ServerPath}/users/${res?.account?.user_id}`)
+                    .then((res) => res.json())
+                    .then((user) => {
+                        // console.log(user);
+                        setUser(user);
+                        setShowForm(false);
+                    });
+            });
     };
 
     const Handle_Signup = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!Validator()) {
-            rePassRef.current?.setCustomValidity("Mật khẩu nhập lại không khớp!");
-        }
+        fetch(`${ServerPath}/users/new`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                last_name: previewLastname,
+            }),
+        })
+            .then((res) => res.json())
+            .then((user) => {
+                fetch(`${ServerPath}/accounts/create`, {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        user_id: user.user_id,
+                        username: uname,
+                        password: repass,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((account) => {
+                        setShowForm(false);
+                    });
+            });
     };
 
     const Validator = () => {
-        if (upass != repass) return false;
-        return true;
+        if (repass !== upass) {
+            rePassRef.current?.setCustomValidity("Mật khẩu nhập lại không khớp!");
+        } else {
+            rePassRef.current?.setCustomValidity("");
+        }
     };
 
     const handleLockspace = (e: { key: string; preventDefault: () => void }) => {
@@ -73,11 +120,22 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
     return (
         <div className={cx("wraper", { formOut: formOut })}>
             <div className={cx("header", { isSignup: isSignUp })}>
-                {!isSignUp ? <p className={cx("header__title")}>Đăng nhập</p> : <p className={cx("header__title")}>Đăng ký</p>}
+                {!isSignUp ? <p className={cx("header__title")}>Đăng nhập</p> : <p className={cx("header__title")}>Đăng ký tài khoản</p>}
                 <span onClick={() => setShowForm(false)}>
                     <FaArrowRight />
                 </span>
             </div>
+
+            <ToastContainer className="p-2" position="top-center" style={{ zIndex: 1 }}>
+                <Toast className="d-inline-block m-1" bg={bkgToast} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast.Header>
+                        <img src="/logo-color.png" width={20} height={20} className="rounded me-2" alt="" />
+                        <strong className="me-auto">{titleToast}</strong>
+                        <small>{timePassed(new Date())}</small>
+                    </Toast.Header>
+                    <Toast.Body>{messageToast}</Toast.Body>
+                </Toast>
+            </ToastContainer>
 
             <div className={cx("form")}>
                 {!isSignUp ? (
@@ -211,7 +269,7 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                     <p>
                         Bạn chưa có tài khoản?{" "}
                         <span style={{ color: "#ffc107" }} onClick={() => setIsSignUp(!isSignUp)}>
-                            Đăng ký
+                            Tạo một tài khoản mới!
                         </span>
                     </p>
                 )}
