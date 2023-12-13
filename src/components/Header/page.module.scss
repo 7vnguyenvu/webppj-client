@@ -285,12 +285,15 @@
                     font-weight: 700;
 
                     background-color: $dark-color;
+                    color: $primary-color;
+                    border: thin solid $primary-color;
                     padding: 8px 16px;
                     border-radius: 8px;
 
                     &:hover {
                         margin: 0 0 0 0;
-                        color: $primary-color;
+                        background-color: $primary-color;
+                        color: $dark-color;
                         border: thin solid $primary-color;
                     }
                 }
