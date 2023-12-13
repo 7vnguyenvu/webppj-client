@@ -43,3 +43,81 @@ $wraper-padding: 0 12px;
         right: -400px;
     }
 }
+
+@keyframes gradient-text-color {
+    0% {
+        background: -webkit-linear-gradient(
+            60deg,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    25% {
+        background: -webkit-linear-gradient(
+            60deg,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    50% {
+        background: -webkit-linear-gradient(
+            60deg,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    75% {
+        background: -webkit-linear-gradient(
+            60deg,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    100% {
+        background: -webkit-linear-gradient(
+            60deg,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color,
+            $success-color,
+            $success-color,
+            $text-color,
+            $text-color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
