@@ -1,0 +1,60 @@
+@import "/styles/variables.module.scss";
+
+.wraper {
+    // background-color: $dark-color;
+    color: $text-color;
+    display: flex;
+    gap: 12px;
+
+    &.vertical {
+        flex-direction: column;
+    }
+
+    & > * {
+        // background-color: $light-color;
+        color: $text-color;
+        font-weight: 700;
+        width: 48px;
+        height: 48px;
+        padding: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        border-radius: 18px;
+
+        span {
+            line-height: 1;
+            font-size: 12px;
+        }
+    }
+
+    .star {
+        svg {
+            font-size: 28px;
+            // color: $warning-color;
+            color: $text-color;
+        }
+    }
+    .like {
+        svg {
+            font-size: 28px;
+            // color: $danger-color;
+            color: $text-color;
+        }
+    }
+    .cmt {
+        svg {
+            font-size: 28px;
+            // color: $success-color;
+            color: $text-color;
+        }
+    }
+    .share {
+        svg {
+            font-size: 28px;
+            // color: $info-color;
+            color: $text-color;
+        }
+    }
+}
