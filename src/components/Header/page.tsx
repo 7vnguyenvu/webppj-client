@@ -13,9 +13,11 @@ const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
 const getAccount = () => {
-    const item = localStorage.getItem("account");
-    if (!item) return undefined;
-    return JSON.parse(item);
+    if (typeof window !== "undefined") {
+        const item = localStorage.getItem("account");
+        if (!item) return undefined;
+        return JSON.parse(item);
+    }
 };
 
 export default function Comp() {
