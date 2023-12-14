@@ -1,7 +1,6 @@
 @import "/styles/variables.module.scss";
 
 .wraper {
-    font-family: $font-family;
     height: $header-height;
     // overflow: hidden;
     background-color: $body-color;
@@ -11,7 +10,7 @@
     left: 0;
     right: 0;
     top: 0;
-    z-index: 9;
+    z-index: 99;
 
     .content {
         height: inherit;
@@ -24,6 +23,7 @@
 
             display: flex;
             align-items: center;
+            border-right: thin solid $primary-color;
 
             &::before {
                 content: "";
@@ -264,7 +264,7 @@
             &:hover {
                 cursor: pointer;
                 & > * {
-                    color: $bell-color;
+                    color: $warning-color;
                 }
             }
 

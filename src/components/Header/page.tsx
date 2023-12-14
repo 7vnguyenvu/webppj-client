@@ -5,21 +5,44 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Overlay as ToolTip, Popover } from "react-bootstrap";
 import { FaBell } from "react-icons/fa6";
 import styles from "./page.module.scss";
-import { User } from "../../../declares/interfaces";
+import { Account, User } from "../../../declares/interfaces";
 import FormSignIn from "../Forms/Signin/page";
+import useAxios from "axios-hooks";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
+const getAccount = () => {
+    const item = localStorage.getItem("account");
+    if (!item) return undefined;
+    return JSON.parse(item);
+};
+
 export default function Comp() {
-    const [user, setUser] = useState<User>();
-    const [userAvatar, setUserAvatar] = useState<string>("");
+    const [account, setAccount] = useState<Account | undefined>(getAccount());
+
+    const [{ data, loading, error }, refetch] = useAxios<User | undefined>({
+        baseURL: ServerPath, // Link server
+        url: `/users/${account?.user_id}`, // path param, post payload, ...
+    });
+
+    const [user, setUser] = useState<User | undefined>(undefined);
     const [showFormSignin, setShowFormSignin] = useState(false);
     const [formSigninOut, setFormSigninOut] = useState(false);
 
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [targetTooltip, setTargetTooltip] = useState(null);
     const userRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+        if (data) {
+            console.log(data);
+            setUser(data);
+        }
+    }, [account, data, error]);
 
     const handle_ShowTooltip = (e: any) => {
         setShowTooltip(!showTooltip);
@@ -33,37 +56,16 @@ export default function Comp() {
 
     let timeoutId: string | number | NodeJS.Timeout | undefined;
 
-    function onMouseOver() {
+    const onMouseOver = () => {
         setShowTooltip(true);
         clearTimeout(timeoutId);
-    }
+    };
 
-    function onMouseOutDelay() {
+    const onMouseOutDelay = () => {
         timeoutId = setTimeout(() => {
             setShowTooltip(false);
         }, 500);
-    }
-
-    useEffect(() => {
-        const item = localStorage.getItem("account");
-        if (!item) return;
-
-        let account;
-
-        if (item) {
-            account = JSON.parse(item);
-            // console.log(account.user_id);
-            fetch(`${ServerPath}/users/${account?.user_id}`)
-                .then((res) => res.json())
-                .then((userRes) => {
-                    if (!userRes) return;
-                    setUser(userRes);
-                    setUserAvatar(userRes?.images?.avatar[0]?.url);
-                });
-        } else {
-            console.log("Chưa đăng nhập!");
-        }
-    }, []);
+    };
 
     const handle_ShowFormSignin = () => {
         setShowFormSignin(true);
@@ -85,7 +87,6 @@ export default function Comp() {
 
         alert("Đã đăng xuất.");
         setUser(undefined);
-        setUserAvatar("");
     };
 
     return (
@@ -102,7 +103,7 @@ export default function Comp() {
                         <>
                             <div className={cx("user")} ref={userRef}>
                                 <div className={cx("avatar")} onClick={handle_ShowTooltip}>
-                                    <img src={userAvatar} alt="user-avatar" draggable="false" />
+                                    <img src={user?.images?.avatar[0]?.url} alt="user-avatar" draggable="false" />
                                 </div>
                                 <ToolTip show={showTooltip} target={targetTooltip} placement="bottom" container={userRef} containerPadding={20}>
                                     <Popover
@@ -113,7 +114,11 @@ export default function Comp() {
                                     >
                                         <Popover.Header as="div" className={cx("user-tooltip__header")}>
                                             <Link href={`/${user?.info?.nick_name}`} className={cx("user-tooltip__header-container")}>
-                                                <img src={userAvatar} alt="avatar" className={cx("user-tooltip__header-container--avatar")} />
+                                                <img
+                                                    src={user?.images?.avatar[0]?.url}
+                                                    alt="avatar"
+                                                    className={cx("user-tooltip__header-container--avatar")}
+                                                />
                                                 <div className={cx("user-tooltip__header-container--body")}>
                                                     <h4>{user?.info?.full_name}</h4>
                                                     <h6>{user?.info?.nick_name}</h6>
@@ -155,7 +160,7 @@ export default function Comp() {
             {showFormSignin && (
                 <>
                     <div className={cx("overlay", { formOut: formSigninOut })} onClick={handle_HideFormSignin}></div>
-                    <FormSignIn setUser={setUser} setUserAvatar={setUserAvatar} formOut={formSigninOut} setShowForm={handle_HideFormSignin} />
+                    <FormSignIn setUser={setUser} formOut={formSigninOut} setShowForm={handle_HideFormSignin} />
                 </>
             )}
         </header>
