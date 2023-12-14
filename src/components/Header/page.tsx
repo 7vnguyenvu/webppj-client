@@ -38,10 +38,10 @@ export default function Comp() {
 
     useEffect(() => {
         if (error) {
-            console.log(error);
+            // console.log(error);
         }
         if (data) {
-            console.log(data);
+            // console.log(data);
             setUser(data);
         }
     }, [account, data, error]);
