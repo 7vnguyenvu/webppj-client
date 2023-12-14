@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={inter.className}>
                 <Header></Header>
                 {children}
-                <Footer></Footer>
+                {/* <Footer></Footer> */}
             </body>
         </html>
     );

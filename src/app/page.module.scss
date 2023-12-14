@@ -2,4 +2,48 @@
 
 .wraper {
     margin-top: $header-height;
+    // margin-top: 100px;
+
+    .intro {
+        height: 100%;
+        display: flex;
+        background-color: $transparent-color;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: "_";
+            display: block;
+            width: 100%;
+            box-shadow: 0 10px 40px $body-color;
+            position: absolute;
+            bottom: 100%;
+            z-index: 10;
+        }
+
+        &::after {
+            content: "_";
+            display: block;
+            width: 100%;
+            box-shadow: 0 -10px 40px $body-color;
+            position: absolute;
+            top: 100%;
+            z-index: 10;
+        }
+    }
+
+    .content {
+        padding: $wraper-padding;
+        overflow: hidden;
+
+        .sidebar {
+            background-color: $dark-color;
+        }
+        .main {
+            background-color: $dark-color;
+        }
+        .roles {
+            background-color: $dark-color;
+        }
+    }
 }

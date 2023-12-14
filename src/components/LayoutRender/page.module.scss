@@ -1,0 +1,13 @@
+@import "/styles/variables.module.scss";
+
+.container {
+    position: relative;
+    height: 100%;
+    .row {
+        height: inherit;
+
+        & > * {
+            padding: 0;
+        }
+    }
+}

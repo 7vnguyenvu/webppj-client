@@ -1,0 +1,13 @@
+@import "/styles/variables.module.scss";
+
+.wraper {
+    // background-color: bisque;
+    width: 100%;
+    height: 500px;
+    margin: auto 0;
+
+    .slide {
+        width: 100%;
+        height: inherit;
+    }
+}
