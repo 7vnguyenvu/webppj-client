@@ -1,10 +1,21 @@
+export interface Account {
+    locked?: boolean;
+    role?: number;
+    user_id?: string;
+}
+
 export interface User {
+    users(users: any): unknown;
+    _id?: string;
     user_id?: string;
     info?: UserInfo;
     images?: UserImage;
     theme_color?: string;
     view?: number;
     viewer?: string[];
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
 }
 
 export interface Image {
@@ -42,4 +53,29 @@ export interface UserNone {
 export interface UserImage {
     avatar?: Image[];
     cover?: Image[];
+}
+
+export interface LayoutItemColConfig {
+    xs?: Record<string, any>;
+    sm?: Record<string, any>;
+    md?: Record<string, any>;
+    lg?: Record<string, any>;
+    xl?: Record<string, any>;
+    xxl?: Record<string, any>;
+}
+
+export interface LayoutItem {
+    type?: string;
+    colConfig?: LayoutItemColConfig;
+    styles?: Record<string, string | number>;
+}
+
+export interface LayoutRender {
+    _id?: string;
+    layout_id?: string;
+    name?: string;
+    item?: LayoutItem[];
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
 }
