@@ -103,6 +103,20 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
             });
     };
 
+    const Handle_AuthFacebook = () => {
+        setBkgToast("dark");
+        setTitleToast("Thông báo");
+        setMessageToast("Tính năng đang được bảo trì!");
+        setShowToast(true);
+    };
+
+    const Handle_AuthGoogle = () => {
+        setBkgToast("dark");
+        setTitleToast("Thông báo");
+        setMessageToast("Tính năng đang được bảo trì!");
+        setShowToast(true);
+    };
+
     const Validator = () => {
         if (repass !== upass) {
             rePassRef.current?.setCustomValidity("Mật khẩu nhập lại không khớp!");
@@ -177,10 +191,10 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
                         </form>
 
                         <div className={cx("form__other")}>
-                            <Button variant="outline-info">
+                            <Button variant="outline-info" onClick={Handle_AuthFacebook}>
                                 <FaFacebookF /> <span>Facebook</span>
                             </Button>
-                            <Button variant="outline-danger">
+                            <Button variant="outline-danger" onClick={Handle_AuthGoogle}>
                                 <FaGoogle /> <span>Google</span>
                             </Button>
                         </div>
