@@ -1,12 +1,12 @@
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/pagination";
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
 
 import LayoutRender from "../LayoutRender/page";
+import { memo } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -14,15 +14,12 @@ interface Props {
     delay?: number;
 }
 
-export default function Comp({ delay }: Props) {
+export default memo(function Comp({ delay }: Props) {
     return (
         <Swiper
             // grabCursor={true}
             centeredSlides={true}
-            pagination={{
-                dynamicBullets: true,
-            }}
-            modules={[Autoplay, Pagination]}
+            modules={[Autoplay]}
             autoplay={{
                 delay: delay,
                 disableOnInteraction: false,
@@ -30,27 +27,11 @@ export default function Comp({ delay }: Props) {
             loop={true}
             className={`mySwiper ` + cx("wraper")}
         >
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
-            <SwiperSlide className={cx("slide")}>
-                <LayoutRender />
-            </SwiperSlide>
+            {new Array(10).fill(0).map((page, index) => (
+                <SwiperSlide key={index} className={cx("slide")}>
+                    <LayoutRender />
+                </SwiperSlide>
+            ))}
         </Swiper>
     );
-}
+});
