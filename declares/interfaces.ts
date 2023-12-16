@@ -79,3 +79,26 @@ export interface LayoutRender {
     updatedAt?: Date;
     __v?: number;
 }
+
+export interface BlogContent {
+    thumbnail?: Image;
+    title?: string;
+    content?: string;
+}
+
+export interface Blog {
+    _id?: string;
+    blog_id?: string;
+    owner_id?: string;
+    content?: BlogContent;
+    hidden?: boolean;
+    locked?: boolean;
+    pin?: boolean;
+    view?: number;
+    like?: number;
+    comment?: number;
+    share: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
+}
