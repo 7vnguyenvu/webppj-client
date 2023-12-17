@@ -341,34 +341,29 @@ function Render(layout: { items: any[] }) {
 function getComponent(type: any) {
     switch (type) {
         case "Background":
-            return <Background img={"/cover.jpg"} show={true} />;
+            return <Background img={"/coverimg-default.png"} show={true} />;
 
         case "CoverImage":
-            return <CoverImage img={"/cover.jpg"} />;
+            return <CoverImage img={"/coverimg-default.png"} />;
 
         case "Avatar":
-            return <Avatar img={"/logo-color.png"} size={{ w: 250, h: 250 }} />;
+            return <Avatar img={"/user-default.png"} size={{ w: 250, h: 250 }} />;
 
         case "Name":
-            return <Name name="SAD BOY CHÂN CHÍNH" />;
+            return <Name name="YOUR NAME PAGE" />;
 
         case "Slogan":
-            return (
-                <Slogan
-                    slogan={`Không phải là MC
-            Nên muốn làm Em Sii`}
-                />
-            );
+            return <Slogan slogan={`Your Slogan...`} />;
 
         case "PageInfo":
             return (
                 <PageInfo
                     vertical={false}
                     info={{
-                        star: 9.5,
-                        like: 7777777,
-                        cmt: 12324,
-                        share: 9354,
+                        star: 7,
+                        like: 7,
+                        cmt: 7,
+                        share: 7,
                     }}
                 />
             );
@@ -378,10 +373,10 @@ function getComponent(type: any) {
                 <PageInfoContent
                     vertical={false}
                     info={{
-                        viewer: 9.5,
-                        blog: 7777777,
-                        link: 12324,
-                        owner: "/logo-color.png",
+                        viewer: 7,
+                        blog: 7,
+                        link: 7,
+                        owner: "/user-default.png",
                     }}
                 />
             );

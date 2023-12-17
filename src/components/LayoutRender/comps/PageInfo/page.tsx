@@ -21,7 +21,7 @@ export default function Comp({ vertical, info }: Props) {
             {info?.star && (
                 <div className={cx("star")}>
                     <FaStar />
-                    <span>{numberConvert(info?.star)}</span>
+                    <span>{info?.star} / 10</span>
                 </div>
             )}
             {info?.like && (
