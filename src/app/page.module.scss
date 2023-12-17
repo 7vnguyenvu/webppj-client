@@ -2,7 +2,6 @@
 
 .wraper {
     margin-top: $header-height;
-    // margin-top: 100px;
 
     .intro {
         height: 100%;
@@ -33,17 +32,77 @@
     }
 
     .content {
-        padding: $wraper-padding;
-        overflow: hidden;
+        .header {
+            background-color: $dark-color;
+            height: 56px;
+            overflow: hidden;
+            position: -webkit-sticky;
+            position: sticky;
+            top: $header-height;
+            // box-shadow: $text-color 0px 2px 2px;
+            z-index: 10;
 
-        .sidebar {
-            background-color: $dark-color;
+            & > * {
+                height: 100%;
+            }
+
+            .sidebar {
+                background-color: $dark-color;
+            }
+
+            .main {
+                // background-color: $dark-color;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                & > * {
+                    background-color: $transparent-color;
+                    color: $light-color;
+                    border: none;
+                    flex: 1;
+                    height: 70%;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:hover {
+                        background-color: $grey-color;
+                    }
+
+                    & svg {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+
+                & > .active {
+                    background-color: $primary-color;
+                    color: $dark-color;
+                }
+            }
+
+            .roles {
+                background-color: $dark-color;
+            }
         }
-        .main {
-            background-color: $dark-color;
-        }
-        .roles {
-            background-color: $dark-color;
+
+        .body {
+            align-items: start;
+            padding: $wraper-padding;
+            background-color: $body-color;
+            overflow-x: hidden;
+
+            .sidebar {
+            }
+
+            .main {
+                // background-color: $grey-color;
+            }
+
+            .roles {
+            }
         }
     }
 }
