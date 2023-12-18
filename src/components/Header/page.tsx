@@ -2,13 +2,13 @@
 import Link from "next/link";
 import classNames from "classnames/bind";
 import { useEffect, useRef, useState } from "react";
-import { Button, Overlay as ToolTip, Popover } from "react-bootstrap";
-import { FaBell } from "react-icons/fa6";
+import { Button, Image, Spinner } from "react-bootstrap";
 import styles from "./page.module.scss";
 import { Account, User } from "../../../declares/interfaces";
 import UserFeature from "./comps/UserFeature/page";
 import FormSignIn from "../Forms/Signin/page";
 import useAxios from "axios-hooks";
+import { FaAngleLeft } from "react-icons/fa6";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
@@ -21,7 +21,12 @@ const getAccount = () => {
     }
 };
 
-export default function Comp() {
+interface Props {
+    namepage?: string;
+    isHomePage: boolean;
+}
+
+export default function Comp({ namepage, isHomePage }: Props) {
     const [account, setAccount] = useState<Account | undefined>(getAccount());
 
     const [{ data, loading, error }, refetch] = useAxios<User | undefined>({
@@ -33,10 +38,6 @@ export default function Comp() {
     const [showFormSignin, setShowFormSignin] = useState(false);
     const [formSigninOut, setFormSigninOut] = useState(false);
 
-    const [showTooltip, setShowTooltip] = useState<boolean>(false);
-    const [targetTooltip, setTargetTooltip] = useState(null);
-    const userRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         if (error) {
             // console.log(error);
@@ -46,29 +47,6 @@ export default function Comp() {
             setUser(data);
         }
     }, [account, data, error]);
-
-    const handle_ShowTooltip = (e: any) => {
-        setShowTooltip(!showTooltip);
-        setTargetTooltip(e.target);
-    };
-
-    const handle_HideTooltip = () => {
-        setShowTooltip(false);
-        setTargetTooltip(null);
-    };
-
-    let timeoutId: string | number | NodeJS.Timeout | undefined;
-
-    const onMouseOver = () => {
-        setShowTooltip(true);
-        clearTimeout(timeoutId);
-    };
-
-    const onMouseOutDelay = () => {
-        timeoutId = setTimeout(() => {
-            setShowTooltip(false);
-        }, 500);
-    };
 
     const handle_ShowFormSignin = () => {
         setShowFormSignin(true);
@@ -82,27 +60,25 @@ export default function Comp() {
         }, 300);
     };
 
-    const handle_Signout = (e: any) => {
-        e.preventDefault();
-
-        localStorage.removeItem("account");
-        handle_HideTooltip();
-
-        alert("Đã đăng xuất.");
-        setUser(undefined);
-    };
-
     return (
         <header className={cx("wraper")}>
             <div className={cx("content")}>
                 <div className={cx("logo")}>
                     <Link href={"/"}>
-                        <img src="/logo-color.png" alt="logo" draggable="false" />
+                        <Image src="/logo-color.png" alt="logo" draggable="false" />
                     </Link>
-                    <span className={cx("name-page")}>Z.Personal</span>
+                    <span className={cx("name-page")}>{namepage ?? "Z.Personal"}</span>
                 </div>
+                {!isHomePage && (
+                    <span className={cx("back")} onClick={() => history.back()}>
+                        <FaAngleLeft />
+                        <p>Trở lại</p>
+                    </span>
+                )}
                 <div className={cx("features")}>
-                    {user ? (
+                    {loading ? (
+                        <Spinner animation="border" />
+                    ) : user ? (
                         <UserFeature user={user} setUser={setUser} />
                     ) : (
                         <Button variant="outline-success" onClick={handle_ShowFormSignin}>
