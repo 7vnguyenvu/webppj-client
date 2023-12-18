@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
+import { Image } from "react-bootstrap";
 const cx = classNames.bind(styles);
 
 interface Props {
@@ -11,5 +12,5 @@ interface Props {
 }
 
 export default function Comp({ img, size }: Props) {
-    return <img className={cx("avatar-img")} src={img} width={size?.w} height={size?.h} />;
+    return <Image alt="" className={cx("avatar-img")} src={img} width={size?.w} height={size?.h} />;
 }

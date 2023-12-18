@@ -78,8 +78,10 @@
                 }
 
                 & > .active {
-                    background-color: $primary-color;
-                    color: $dark-color;
+                    // background-color: $primary-color;
+                    // color: $dark-color;
+                    color: $primary-color;
+                    border-bottom: 0.2rem solid $primary-color;
                 }
             }
 

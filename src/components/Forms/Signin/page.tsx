@@ -3,7 +3,7 @@ import { FaArrowRight, FaCircleInfo, FaFacebookF, FaGoogle, FaKey, FaUser } from
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
 import { User } from "../../../../declares/interfaces";
-import { Button, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Image, Toast, ToastContainer } from "react-bootstrap";
 import { timePassed } from "../../../../services/timepassed";
 
 const cx = classNames.bind(styles);
@@ -143,7 +143,7 @@ function Signin({ setUser, formOut, setShowForm }: Props) {
             <ToastContainer className="p-2" position="top-center" style={{ zIndex: 1 }}>
                 <Toast className="d-inline-block m-1" bg={bkgToast} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
                     <Toast.Header>
-                        <img src="/logo-color.png" width={20} height={20} className="rounded me-2" alt="" />
+                        <Image src="/logo-color.png" width={20} height={20} className="rounded me-2" alt="" />
                         <strong className="me-auto">{titleToast}</strong>
                         <small>{timePassed(new Date())}</small>
                     </Toast.Header>

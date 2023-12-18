@@ -22,7 +22,8 @@ $header-height: 60px;
 $navlink-height: 70px;
 $swiper-height: 560px;
 
-$wraper-padding: 0 12px;
+$padding: 12px;
+$wraper-padding: 0 $padding;
 
 @keyframes form-fade-in {
     0% {

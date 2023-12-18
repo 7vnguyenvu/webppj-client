@@ -1,11 +1,12 @@
-export function timePassed(previous: Date): string {
+export function timePassed(previous: string | Date | undefined) {
+    const previousDate = previous ? new Date(previous) : new Date();
+    const elapsed = new Date().getTime() - previousDate.getTime();
+
     const msPerMinute = 60 * 1000;
     const msPerHour = msPerMinute * 60;
     const msPerDay = msPerHour * 24;
     const msPerMonth = msPerDay * 30;
     const msPerYear = msPerDay * 365;
-
-    const elapsed = new Date().getTime() - previous.getTime();
 
     if (elapsed === 0) {
         return "Bây giờ";

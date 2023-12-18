@@ -11,6 +11,7 @@ export interface User {
     info?: UserInfo;
     images?: UserImage;
     theme_color?: string;
+    like?: number;
     view?: number;
     viewer?: string[];
     createdAt?: Date;
@@ -81,15 +82,55 @@ export interface LayoutRender {
 }
 
 export interface BlogContent {
-    thumbnail?: Image;
+    thumbnail?: Image[];
     title?: string;
     content?: string;
+}
+
+export interface BlogOwner {
+    name?: string;
+    avatar?: Image[];
+    page_url?: string;
 }
 
 export interface Blog {
     _id?: string;
     blog_id?: string;
-    owner_id?: string;
+    owner?: BlogOwner;
+    content?: BlogContent;
+    hidden?: boolean;
+    locked?: boolean;
+    pin?: boolean;
+    view?: number;
+    like?: number;
+    comment?: number;
+    share: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
+}
+
+export interface Page {
+    _id?: string;
+    blog_id?: string;
+    owner?: BlogOwner;
+    content?: BlogContent;
+    hidden?: boolean;
+    locked?: boolean;
+    pin?: boolean;
+    view?: number;
+    like?: number;
+    comment?: number;
+    share: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
+}
+
+export interface Event {
+    _id?: string;
+    blog_id?: string;
+    owner?: BlogOwner;
     content?: BlogContent;
     hidden?: boolean;
     locked?: boolean;

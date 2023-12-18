@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
+import { Image } from "react-bootstrap";
 const cx = classNames.bind(styles);
 
 interface Props {
@@ -8,5 +9,5 @@ interface Props {
 }
 
 export default function Comp({ img, show }: Props) {
-    return show ? <img className={cx("background-img")} src={img} /> : <></>;
+    return show ? <Image alt="" className={cx("background-img")} src={img} /> : <></>;
 }

@@ -65,6 +65,26 @@
             }
         }
 
+        .back {
+            margin-left: 48px;
+            padding-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+
+            & > * {
+                margin: 0;
+            }
+
+            &:hover {
+                cursor: pointer;
+                margin-left: 40px;
+                gap: 16px;
+            }
+        }
+
         .features {
             // width: 844px;
             flex: 1;

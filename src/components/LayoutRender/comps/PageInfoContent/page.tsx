@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import styles from "./page.module.scss";
 import { FaLink, FaNewspaper, FaShare, FaEye } from "react-icons/fa6";
 import { numberConvert } from "../../../../../services/numconvert";
+import { Image } from "react-bootstrap";
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +39,7 @@ export default function Comp({ vertical, info }: Props) {
             )}
             {info?.owner && (
                 <div className={cx("owner")}>
-                    <img src={info?.owner} />
+                    <Image alt="" src={info?.owner} />
                 </div>
             )}
         </div>
