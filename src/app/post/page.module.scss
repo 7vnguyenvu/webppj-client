@@ -1,0 +1,44 @@
+@import "/styles/variables.module.scss";
+
+.wraper {
+    margin-top: $header-height;
+    padding: $wraper-padding;
+    overflow: hidden;
+
+    .title {
+        flex: 7;
+
+        input {
+            font-size: 32px;
+            font-weight: 500;
+            // background-color: $transparent-color;
+            border: none;
+
+            &:focus-visible {
+                outline: none;
+                box-shadow: none;
+            }
+
+            // &::-webkit-input-placeholder {
+            //     color: violet;
+            // }
+        }
+    }
+
+    .submit {
+        padding-left: 0;
+
+        button {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            font-weight: 500;
+        }
+    }
+
+    .content {
+        height: auto;
+        background-color: $dark-color;
+        color: $text-color;
+    }
+}
