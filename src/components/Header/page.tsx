@@ -7,8 +7,9 @@ import styles from "./page.module.scss";
 import { Account, User } from "../../../declares/interfaces";
 import UserFeature from "./comps/UserFeature/page";
 import FormSignIn from "../Forms/Signin/page";
-import useAxios from "axios-hooks";
 import { FaAngleLeft } from "react-icons/fa6";
+import { useGlobalContext } from "@/context/store";
+import useAxios from "axios-hooks";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
@@ -27,26 +28,26 @@ interface Props {
 }
 
 export default function Comp({ namepage, isHomePage }: Props) {
+    const { user, setUser } = useGlobalContext();
+
     const [account, setAccount] = useState<Account | undefined>(getAccount());
 
-    const [{ data, loading, error }, refetch] = useAxios<User | undefined>({
-        baseURL: ServerPath, // Link server
-        url: `/users/${account?.user_id}`, // path param, post payload, ...
+    const [{ data: userFetchData, loading: userFetchLoading, error: userFetchError }, userReFetchData] = useAxios<User | undefined>({
+        baseURL: ServerPath,
+        url: `/users/${account?.user_id}`,
     });
 
-    const [user, setUser] = useState<User | undefined>(undefined);
     const [showFormSignin, setShowFormSignin] = useState(false);
     const [formSigninOut, setFormSigninOut] = useState(false);
 
     useEffect(() => {
-        if (error) {
-            // console.log(error);
+        if (!user) {
+            userReFetchData();
+            if (userFetchData) {
+                setUser(userFetchData);
+            }
         }
-        if (data) {
-            // console.log(data);
-            setUser(data);
-        }
-    }, [account, data, error]);
+    }, [userFetchData]);
 
     const handle_ShowFormSignin = () => {
         setShowFormSignin(true);
@@ -76,9 +77,16 @@ export default function Comp({ namepage, isHomePage }: Props) {
                     </span>
                 )}
                 <div className={cx("features")}>
-                    {loading ? (
-                        <Spinner animation="border" />
+                    {/* {userFetchLoading ? (
+                        <Spinner variant="success" animation="border" />
                     ) : user ? (
+                        <UserFeature user={user} setUser={setUser} />
+                    ) : (
+                        <Button variant="outline-success" onClick={handle_ShowFormSignin}>
+                            Đăng nhập
+                        </Button>
+                    )} */}
+                    {user ? (
                         <UserFeature user={user} setUser={setUser} />
                     ) : (
                         <Button variant="outline-success" onClick={handle_ShowFormSignin}>
@@ -90,7 +98,7 @@ export default function Comp({ namepage, isHomePage }: Props) {
             {showFormSignin && (
                 <>
                     <div className={cx("overlay", { formOut: formSigninOut })} onClick={handle_HideFormSignin}></div>
-                    <FormSignIn setUser={setUser} formOut={formSigninOut} setShowForm={handle_HideFormSignin} />
+                    <FormSignIn formOut={formSigninOut} setShowForm={handle_HideFormSignin} />
                 </>
             )}
         </header>

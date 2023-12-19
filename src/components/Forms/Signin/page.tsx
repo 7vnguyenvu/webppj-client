@@ -5,17 +5,19 @@ import styles from "./page.module.scss";
 import { User } from "../../../../declares/interfaces";
 import { Button, Image, Toast, ToastContainer } from "react-bootstrap";
 import { timePassed } from "../../../../services/timepassed";
+import { useGlobalContext } from "@/context/store";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
 interface Props {
-    setUser: Dispatch<SetStateAction<User | undefined>>;
     formOut: boolean;
     setShowForm: Dispatch<SetStateAction<boolean>>;
 }
 
-function Signin({ setUser, formOut, setShowForm }: Props) {
+function Signin({ formOut, setShowForm }: Props) {
+    const { setUser } = useGlobalContext();
+
     const [uname, setUName] = useState<string>("");
     const [upass, setUPass] = useState<string>("");
     const [repass, setRePass] = useState<string>("");
