@@ -1,0 +1,185 @@
+@import "/styles/variables.module.scss";
+
+.wraper {
+    z-index: 10;
+    margin-top: 60px;
+    width: 700px;
+    height: auto;
+    position: fixed;
+    overflow: hidden;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $body-color;
+    transition: all 0.2s ease-in-out;
+    animation: form-addblog-fade-in 0.3s forwards;
+    border-radius: 8px;
+
+    &.formOut {
+        animation: form-addblog-fade-out 0.3s forwards;
+    }
+
+    .header {
+        height: $header-height;
+        background-color: $body-color;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        border-bottom: thin solid $text-color;
+        cursor: default;
+
+        &__title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            color: $text-color;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        span {
+            margin-left: auto;
+            svg {
+                font-size: 28px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .form {
+        padding: 20px;
+        max-height: 750px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        z-index: 1;
+
+        & > * {
+            width: 100%;
+        }
+
+        & input,
+        & textarea {
+            background-color: $transparent-color;
+            color: $text-color;
+            width: 100%;
+            padding: $padding;
+            border: none;
+            outline: none;
+        }
+
+        &__title {
+            & > * {
+                font-size: 28px;
+                font-weight: 600;
+            }
+        }
+
+        &__content {
+            flex: 1;
+            & > * {
+                resize: none;
+                height: 350px;
+                overflow: overlay;
+
+                &::-webkit-scrollbar {
+                    width: 2px;
+                }
+            }
+        }
+
+        &__preview-image {
+            background-color: $dark-color;
+            padding: $padding;
+            max-height: 300px;
+            border-radius: 8px;
+            overflow-y: overlay;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            & > * {
+                position: relative;
+
+                & img {
+                    height: 100px;
+                    border-radius: 8px;
+                }
+
+                & > span:last-child {
+                    width: 20px;
+                    height: 20px;
+                    color: $danger-color;
+                    position: absolute;
+                    top: 4px;
+                    right: 4px;
+
+                    & > svg {
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    &:active {
+                        cursor: default;
+                    }
+                }
+            }
+
+            & > label {
+                width: 170px;
+                height: 100px;
+                background-color: $grey-color;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &:active {
+                    cursor: default;
+                }
+
+                & > * {
+                    font-size: 28px;
+                }
+            }
+
+            &::-webkit-scrollbar {
+                width: 2px;
+            }
+        }
+
+        &__button {
+            margin-top: $padding;
+
+            & > * {
+                width: 100%;
+                font-weight: 700;
+                background-color: $primary-color;
+                border: none;
+
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        padding: 0 20px;
+
+        span {
+            cursor: pointer;
+        }
+    }
+}
