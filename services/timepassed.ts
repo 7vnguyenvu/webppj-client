@@ -5,8 +5,11 @@ export function timePassed(previous: string | Date | undefined) {
     const msPerMinute = 60 * 1000;
     const msPerHour = msPerMinute * 60;
     const msPerDay = msPerHour * 24;
+    const msPerWeek = msPerDay * 7;
     const msPerMonth = msPerDay * 30;
     const msPerYear = msPerDay * 365;
+
+    const date = `${previousDate.getDate()}/${previousDate.getMonth() + 1}/${previousDate.getFullYear()}`;
 
     if (elapsed === 0) {
         return "Bây giờ";
@@ -18,10 +21,12 @@ export function timePassed(previous: string | Date | undefined) {
     } else if (elapsed < msPerDay) {
         return Math.round(elapsed / msPerHour) + " giờ trước";
     } else if (elapsed < msPerMonth) {
-        return Math.round(elapsed / msPerDay) + " ngày trước";
+        return Math.round(elapsed / msPerDay) + " ngày trước | " + date;
+    } else if (elapsed < msPerMonth) {
+        return Math.round(elapsed / msPerWeek) + " tuần trước | " + date;
     } else if (elapsed < msPerYear) {
-        return Math.round(elapsed / msPerMonth) + " tháng trước";
+        return Math.round(elapsed / msPerMonth) + " tháng trước | " + date;
     } else {
-        return Math.round(elapsed / msPerYear) + " năm trước";
+        return Math.round(elapsed / msPerYear) + " năm trước | " + date;
     }
 }
