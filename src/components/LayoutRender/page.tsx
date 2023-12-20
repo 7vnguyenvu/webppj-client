@@ -8,7 +8,7 @@ import Name from "./comps/Name/page";
 import Slogan from "./comps/Slogan/page";
 import PageInfo from "./comps/PageInfo/page";
 import PageInfoContent from "./comps/PageInfoContent/page";
-import { LayoutRender } from "../../../declares/interfaces";
+import { LayoutRender, Page } from "../../../declares/interfaces";
 import Link from "next/link";
 
 const cx = classNames.bind(styles);
@@ -303,6 +303,18 @@ const layouts = [
 
 interface Props {
     layout?: LayoutRender;
+    dataload: Page;
+}
+
+export default function Comp({ layout }: Props) {
+    const layouttmp = layouts[Math.floor(Math.random() * layouts.length)];
+    // const layouttmp = layouts[1];
+
+    return (
+        <Link href={"#"}>
+            <Layout layout={layouttmp} />
+        </Link>
+    );
 }
 
 // Layout handler
@@ -384,15 +396,4 @@ function getComponent(type: any) {
         default:
             return null;
     }
-}
-
-export default function Comp({ layout }: Props) {
-    const layouttmp = layouts[Math.floor(Math.random() * layouts.length)];
-    // const layouttmp = layouts[1];
-
-    return (
-        <Link href={"#"}>
-            <Layout layout={layouttmp} />
-        </Link>
-    );
 }

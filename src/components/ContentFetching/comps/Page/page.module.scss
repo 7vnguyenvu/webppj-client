@@ -1,0 +1,170 @@
+@import "/styles/variables.module.scss";
+
+.page {
+    height: 700px;
+    margin-top: 12px;
+    background-color: $dark-color;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+@import "/styles/variables.module.scss";
+
+.blog {
+    margin-top: 12px;
+    background-color: $dark-color;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .header {
+        padding: $padding;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        &__avatar {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+
+            background-color: $white-color;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        &__info {
+            display: flex;
+            flex-direction: column;
+
+            &-name {
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+
+            &-timepass {
+                font-size: 0.7rem;
+                font-weight: 400;
+
+                &::before {
+                    content: "●";
+                    padding-right: 8px;
+                }
+            }
+        }
+
+        &__more {
+            height: 100%;
+            padding: 8px;
+            margin-left: auto;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .body {
+        & > * {
+            padding: $wraper-padding;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .content {
+            white-space: pre;
+        }
+        .thumbnail {
+            padding: 0;
+            width: 100%;
+            overflow: hidden;
+
+            display: flex;
+            gap: 10px;
+            gap: 2px;
+
+            & img {
+                max-width: 100%;
+                object-fit: contain;
+            }
+
+            & > div {
+                flex: 1;
+                display: flex;
+                gap: 2px;
+
+                & > img {
+                    flex: 1;
+                    max-width: 50%;
+                    object-fit: cover;
+                }
+
+                & > div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    position: relative;
+                }
+            }
+
+            .overlay {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50%;
+                background: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                font-size: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+    .interact {
+        padding: $padding;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+
+        & > * {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        & > *:last-child {
+            gap: 32px;
+            & > * {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+    }
+
+    .action {
+        border-top: 1px solid $grey-color;
+        padding: $padding;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+
+        & > * {
+            flex: 1;
+            background-color: $grey-color;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            &:hover {
+                background-color: $body-color;
+            }
+        }
+    }
+}

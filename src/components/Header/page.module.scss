@@ -119,10 +119,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        animation: form-fade-in 0.3s forwards;
+        animation: form-signin-fade-in 0.3s forwards;
 
         &.formOut {
-            animation: form-fade-out 0.3s forwards;
+            animation: form-signin-fade-out 0.3s forwards;
         }
     }
 }
