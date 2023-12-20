@@ -39,7 +39,6 @@
             position: -webkit-sticky;
             position: sticky;
             top: $header-height;
-            // box-shadow: $text-color 0px 2px 2px;
             z-index: 10;
 
             & > * {
@@ -47,7 +46,30 @@
             }
 
             .sidebar {
-                background-color: $dark-color;
+                display: flex;
+                padding: $wraper-padding;
+
+                & > * {
+                    overflow: hidden;
+                    text-decoration: none;
+
+                    display: flex;
+                    align-items: center;
+                    gap: $padding;
+
+                    & > img {
+                        width: 36px;
+                        height: 36px;
+                        object-fit: contain;
+                        border-radius: 50%;
+                        overflow: hidden;
+                    }
+
+                    & .name {
+                        color: $text-color;
+                        font-weight: 700;
+                    }
+                }
             }
 
             .main {
@@ -86,25 +108,110 @@
             }
 
             .roles {
-                background-color: $dark-color;
+                display: flex;
+                align-items: center;
+                padding: $wraper-padding;
+                position: relative;
+
+                & > *:first-child {
+                    flex: 1;
+                    padding: 4px 40px 4px 12px;
+                    border-radius: 20px;
+                    position: relative;
+                    border: none;
+                    background-color: $transparent-color;
+                    border-bottom: 2px solid $primary-color;
+                    border-top: 1px solid $grey-color;
+                    color: $text-color;
+
+                    &:focus {
+                        outline: none;
+                        border-top: 1px solid $light-color;
+                    }
+                }
+
+                & > *:last-child {
+                    width: 36px;
+                    height: 36px;
+                    padding: 10px;
+                    position: absolute;
+                    right: $padding;
+                    color: $primary-color;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    &:active {
+                        cursor: default;
+                        color: $second-color;
+                    }
+                }
             }
         }
 
         .body {
             align-items: start;
-            padding: $wraper-padding;
             background-color: $body-color;
-            overflow-x: hidden;
+            position: relative;
 
-            .sidebar {
+            .sidebar,
+            .roles {
+                padding: $wraper-padding;
+                overflow: hidden;
+                position: -webkit-sticky;
+                position: sticky;
+                top: calc($header-height + 56px);
+                z-index: 10;
+
+                display: flex;
+                flex-direction: column;
+
+                & > * {
+                    // background-color: $grey-color;
+                    margin-top: 8px;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+
+                    & > * {
+                        margin: 0;
+                        font-weight: 600;
+                        user-select: none;
+                    }
+                    &:hover {
+                        background-color: $grey-color;
+                        cursor: pointer;
+                    }
+                    &:active {
+                        background-color: $dark-color;
+                        cursor: default;
+                    }
+                }
             }
 
             .main {
                 // background-color: $grey-color;
             }
-
-            .roles {
-            }
         }
+    }
+}
+
+.overlay {
+    z-index: 10;
+    background-color: #00000080;
+    backdrop-filter: blur(5px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: form-fade-in 0.3s forwards;
+
+    &.formOut {
+        animation: form-fade-out 0.3s forwards;
     }
 }

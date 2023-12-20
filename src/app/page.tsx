@@ -2,15 +2,21 @@
 import useAxios from "axios-hooks";
 import classNames from "classnames/bind";
 import styles from "./page.module.scss";
-import { Stack, Button, Col, OverlayTrigger, Tooltip, Spinner } from "react-bootstrap";
-import { FaRegNewspaper, FaPager, FaRegCalendarCheck } from "react-icons/fa6";
+import { Stack, Button, Col, OverlayTrigger, Tooltip, Spinner, Image } from "react-bootstrap";
+import { FaUserFriends } from "react-icons/fa";
+import { FaRegNewspaper, FaPager, FaRegCalendarCheck, FaPenNib } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 
-import Header from "../components/Header/page";
+import FormAddBlog from "@/components/Forms/AddBlog/page";
+import Header from "@/components/Header/page";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 
 import HomeIntro from "../components/HomeIntro/page";
 import ContentFetching from "../components/ContentFetching/page";
 import { Blog } from "../../declares/interfaces";
+import { useGlobalContext } from "@/context/store";
+import Link from "next/link";
+import { IoSearch } from "react-icons/io5";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
@@ -35,18 +41,25 @@ const tabs = [
 ];
 
 export default function Home() {
+    const { user } = useGlobalContext();
+
     const [{ data, loading, error }, refetch] = useAxios<Blog[]>({
         baseURL: ServerPath,
         url: `/${tabs?.[0]?.api}`,
     });
 
-    const renderTooltip = (name: string) => <Tooltip>{name}</Tooltip>;
-
     const [tabData, setTabData] = useState<Record<string, any>>();
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.api);
 
-    // console.log("tabData hiện tại");
-    // console.log(tabData);
+    const [showFormAddBlog, setShowFormAddBlog] = useState(false);
+    const [formAddBlogOut, setFormAddBlogOut] = useState(false);
+
+    const renderTooltip = (name: string) => <Tooltip>{name}</Tooltip>;
+
+    const scrollTo = (y: number) => {
+        if (y <= HomeContentHeaderPositionScrollY) window.scrollTo(0, HomeContentHeaderPositionScrollY);
+        else window.scrollTo(0, y);
+    };
 
     const handle_ChangeTab = (tab: any) => {
         if (tab.api === activeTab) {
@@ -67,9 +80,16 @@ export default function Home() {
         }
     };
 
-    const scrollTo = (y: number) => {
-        if (y <= HomeContentHeaderPositionScrollY) window.scrollTo(0, HomeContentHeaderPositionScrollY);
-        else window.scrollTo(0, y);
+    const handle_ShowFormAddBlog = () => {
+        setShowFormAddBlog(true);
+        setFormAddBlogOut(false);
+    };
+
+    const handle_HideFormAddBlog = () => {
+        setFormAddBlogOut(true);
+        setTimeout(() => {
+            setShowFormAddBlog(false);
+        }, 300);
     };
 
     useEffect(() => {
@@ -115,9 +135,14 @@ export default function Home() {
                     <HomeIntro delay={3000} />
                 </section>
                 <section className={cx("content")}>
-                    <Stack direction="horizontal" gap={4} className={cx("header")}>
-                        <Col xs={0} md={2} className={cx("sidebar")}>
-                            Sidebar header
+                    <Stack direction="horizontal" className={cx("header")}>
+                        <Col md={2} className={cx("sidebar")}>
+                            {!!user && (
+                                <Link href={`/${user.info?.nick_name}`}>
+                                    <Image src={user.images?.avatar?.[0].url} alt={user.images?.avatar?.[0].filename} />
+                                    <span className={cx("name")}>{user.info?.full_name}</span>
+                                </Link>
+                            )}
                         </Col>
                         <Col xs={12} md={9} lg={5} className={cx("main", "mx-auto")}>
                             {tabs &&
@@ -134,31 +159,41 @@ export default function Home() {
                                     </OverlayTrigger>
                                 ))}
                         </Col>
-                        <Col xs={0} lg={2} className={cx("roles")}>
-                            Role header
+                        <Col lg={2} className={cx("roles")}>
+                            <input type="text" placeholder="Search.." />
+                            <IoSearch />
                         </Col>
                     </Stack>
-                    <Stack direction="horizontal" gap={2} className={cx("body")}>
-                        <Col xs={0} md={2} className={cx("sidebar")}>
-                            <div>
-                                <h2>sidebar left</h2>
-                            </div>
+                    <Stack direction="horizontal" className={cx("body")}>
+                        <Col md={2} className={cx("sidebar")}>
+                            <span>
+                                <FaUserFriends />
+                                <p>Bạn bè</p>
+                            </span>
                         </Col>
                         <Col xs={12} md={9} lg={5} className={cx("main", "mx-auto")}>
                             {loading && (
                                 <div className="d-flex justify-content-center mt-4">
-                                    <Spinner animation="border" />
+                                    <Spinner variant="success" animation="border" />
                                 </div>
                             )}
-                            {/* {<ContentFetching type={activeTab} data={tabData?.[activeTab!]?.data} />} */}
                             {tabData?.[activeTab!]?.data && <ContentFetching type={activeTab} list={tabData?.[activeTab!]?.data} />}
                         </Col>
-                        <Col xs={0} lg={2} className={cx("roles")}>
-                            <span>Role body</span>
+                        <Col lg={2} className={cx("roles")}>
+                            <span onClick={handle_ShowFormAddBlog}>
+                                <FaPenNib />
+                                <p>Tạo bài viết</p>
+                            </span>
                         </Col>
                     </Stack>
                 </section>
             </main>
+            {showFormAddBlog && (
+                <>
+                    <div className={cx("overlay", { formOut: formAddBlogOut })}></div>
+                    <FormAddBlog formOut={formAddBlogOut} setShowForm={handle_HideFormAddBlog} />
+                </>
+            )}
         </>
     );
 }
