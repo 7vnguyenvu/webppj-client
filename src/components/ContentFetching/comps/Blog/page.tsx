@@ -16,6 +16,9 @@ import {
 import { Blog } from "../../../../../declares/interfaces";
 import { timePassed } from "../../../../../services/timepassed";
 import { numberConvert } from "../../../../../services/numconvert";
+import { useGlobalContext } from "@/context/store";
+import { number } from "yup";
+import { memo, SetStateAction, Dispatch, useState } from "react";
 
 interface Props {
     item: Blog;
@@ -24,7 +27,39 @@ interface Props {
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
 
-export default function BlogComp({ item }: Props) {
+export default memo(function BlogComp({ item }: Props) {
+    const { user } = useGlobalContext();
+    const [countLike, setCountLike] = useState<number>(item.like ?? 0);
+    const [isLiked, setIsLike] = useState<boolean>(false);
+
+    user &&
+        fetch(`${ServerPath}/likes/isuser/${user?.user_id}`)
+            .then((res) => res.json())
+            .then((bol) => {
+                setIsLike(bol);
+            });
+
+    fetch(`${ServerPath}/likes/blog/${item.blog_id}`)
+        .then((res) => res.json())
+        .then((like) => {
+            setCountLike(like);
+        });
+
+    const handle_like = (rid: string | undefined) => {
+        if (!user) {
+            alert("Hãy đăng nhập!");
+            return;
+        }
+
+        fetch(`${ServerPath}/likes/blog/${user?.user_id}/${rid}`, { method: "post" })
+            .then((res) => res.json())
+            .then((data) => {
+                // console.log(data);
+                setCountLike(data.like);
+                setIsLike(!isLiked);
+            });
+    };
+
     return (
         <div className={cx("blog")}>
             <div className={cx("header")}>
@@ -94,8 +129,8 @@ export default function BlogComp({ item }: Props) {
             </div>
             <div className={cx("interact")}>
                 <div>
-                    <FaRegHeart />
-                    {item?.like}
+                    {isLiked ? <FaHeart /> : <FaRegHeart />}
+                    {countLike}
                 </div>
                 <div>
                     <div>
@@ -113,7 +148,7 @@ export default function BlogComp({ item }: Props) {
                 </div>
             </div>
             <div className={cx("action")}>
-                <Button>
+                <Button className={cx({ isliked: isLiked })} onClick={() => handle_like(item?.blog_id)}>
                     <FaHeart />
                     Thích
                 </Button>
@@ -128,4 +163,4 @@ export default function BlogComp({ item }: Props) {
             </div>
         </div>
     );
-}
+});

@@ -14,9 +14,10 @@ const maxFilesAllowed = 50; // Số lượng tệp tin tối đa cho phép
 interface Props {
     formOut: boolean;
     setShowForm: Dispatch<SetStateAction<boolean>>;
+    setIsDoneAddBlog: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Comp({ formOut, setShowForm }: Props) {
+export default function Comp({ formOut, setShowForm, setIsDoneAddBlog }: Props) {
     const { user } = useGlobalContext();
 
     const [title, setTitle] = useState<string>("");
@@ -90,6 +91,7 @@ export default function Comp({ formOut, setShowForm }: Props) {
                         .then((res) => res.json())
                         .then((res) => {
                             // console.log(res);
+                            setIsDoneAddBlog(true);
                             return;
                         })
                         .catch((err) => {
@@ -168,6 +170,7 @@ export default function Comp({ formOut, setShowForm }: Props) {
                 .then((res) => res.json())
                 .then((res) => {
                     // console.log(res);
+                    setIsDoneAddBlog(true);
                     return;
                 })
                 .catch((err) => {
@@ -209,7 +212,7 @@ export default function Comp({ formOut, setShowForm }: Props) {
                 <div className={cx("form__preview-image")}>
                     {images.map((file) => (
                         <span key={file.name}>
-                            <Image src={URL.createObjectURL(file)} />
+                            <Image src={URL.createObjectURL(file)} alt="" />
                             <span onClick={() => removeImage(file)}>
                                 <FaRegCircleXmark />
                             </span>

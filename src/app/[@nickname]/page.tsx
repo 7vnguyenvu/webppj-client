@@ -6,7 +6,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import { Col, Container, Row, Image, Button, Spinner, Tabs, Tab, Nav } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/pagination";
 import styles from "./page.module.scss";
 import {
     FaCircle,
@@ -190,7 +192,15 @@ export default function Comp() {
                         </Col>
                         <Col md={8} className={cx("col-right")}>
                             <Row className={cx("user-cover")}>
-                                <Swiper slidesPerView={1} loop={true}>
+                                <Swiper
+                                    slidesPerView={1}
+                                    loop={true}
+                                    autoplay={{ delay: 3000 }}
+                                    modules={[Pagination, Autoplay]}
+                                    pagination={{
+                                        type: "fraction",
+                                    }}
+                                >
                                     {data?.images?.cover &&
                                         data?.images?.cover.map((image, index) => (
                                             <SwiperSlide key={index} className={cx("image")}>

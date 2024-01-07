@@ -24,6 +24,12 @@ export interface Image {
     url?: string;
 }
 
+export class ImageStatus {
+    hide?: boolean;
+    filename?: string;
+    url?: string;
+}
+
 export interface SocialUrl {
     name?: string;
     hyperlink?: string;
@@ -110,18 +116,51 @@ export interface Blog {
     __v?: number;
 }
 
+export interface PublicPageImages {
+    background?: ImageStatus;
+    avatar?: ImageStatus;
+    cover?: ImageStatus[];
+}
+
+export interface PublicPageShow {
+    name?: string;
+    slogan?: string;
+    images?: PublicPageImages;
+}
+
+export interface Interaction {
+    star?: number;
+    like?: number;
+    cmt?: number;
+    share?: number;
+}
+
+export interface InteractionContent {
+    viewer?: number;
+    blog?: number;
+    link?: number;
+    owner_avatar?: string;
+}
+
+export interface PublicPageInfo {
+    vertical?: boolean;
+    info?: Interaction;
+}
+
+export interface PageInfoContent {
+    vertical?: boolean;
+    info?: InteractionContent;
+}
+
 export interface Page {
     _id?: string;
-    blog_id?: string;
-    owner?: BlogOwner;
-    content?: BlogContent;
-    hidden?: boolean;
-    locked?: boolean;
-    pin?: boolean;
-    view?: number;
-    like?: number;
-    comment?: number;
-    share: number;
+    page_id?: string;
+    owner_id?: string;
+    layout_id?: string;
+    thumbnail?: Image;
+    show?: PublicPageShow;
+    pageinfo?: PublicPageInfo;
+    pageinfocontent?: PageInfoContent;
     createdAt?: Date;
     updatedAt?: Date;
     __v?: number;

@@ -19,6 +19,8 @@ import { numberConvert } from "../../../services/numconvert";
 
 import BlogComp from "./comps/Blog/page";
 import PageComp from "./comps/Page/page";
+import { useGlobalContext } from "@/context/store";
+import { useState } from "react";
 
 interface Props {
     type?: string;

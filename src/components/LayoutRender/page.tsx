@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 // Dummy data
 const layouts = [
     {
-        id: 1,
+        id: "1",
         name: "Layout 1",
         items: [
             {
@@ -160,7 +160,7 @@ const layouts = [
         ],
     },
     {
-        id: 2,
+        id: "2",
         name: "Layout 2",
         items: [
             {
@@ -301,14 +301,129 @@ const layouts = [
     },
 ];
 
+const pages: Page[] = [
+    {
+        page_id: "1243214",
+
+        owner_id: "20231211133753643",
+
+        layout_id: "2",
+
+        thumbnail: {
+            filename: "default.png",
+            url: "http://localhost:7000/images/layouts/page-intro-thumbnails/default.png",
+        },
+
+        show: {
+            name: "SEVEN - V | FIFTY TWO",
+            slogan: `Chấm dứt chuỗi ngày vô vọng
+            Vì đã có em là người ở trong lòng ^^`,
+            images: {
+                background: {
+                    hide: false,
+                    filename: "default.png",
+                    url: "http://localhost:7000/images/cover-images/admin.jpg",
+                },
+                avatar: {
+                    hide: false,
+                    filename: "7V_NGUYENVU_NEW.png",
+                    url: "http://localhost:7000/images/avatars/7V_NGUYENVU_NEW.png",
+                },
+                cover: [
+                    {
+                        hide: false,
+                        filename: "admin.jpg",
+                        url: "http://localhost:7000/images/cover-images/admin.jpg",
+                    },
+                ],
+            },
+        },
+
+        pageinfo: {
+            vertical: false,
+            info: {
+                star: 9,
+                like: 597,
+                cmt: 12943,
+                share: 498,
+            },
+        },
+
+        pageinfocontent: {
+            vertical: false,
+            info: {
+                viewer: 124435,
+                blog: 17,
+                link: 1,
+                owner_avatar: "http://localhost:7000/images/avatars/admin.png",
+            },
+        },
+    },
+    {
+        page_id: "4367344",
+
+        owner_id: "20231211133753643",
+
+        layout_id: "1",
+
+        thumbnail: {
+            filename: "default.png",
+            url: "http://localhost:7000/images/layouts/page-intro-thumbnails/layout_1.png",
+        },
+
+        show: {
+            name: "NGUYỄN VŨ - SAD THỦ",
+            slogan: `Đến là tới - Đụng là chạm!`,
+            images: {
+                background: {
+                    hide: false,
+                    filename: "default.png",
+                    url: "http://localhost:7000/images/cover-images/default-1.jpg",
+                },
+                avatar: {
+                    hide: false,
+                    filename: "admin.png",
+                    url: "http://localhost:7000/images/avatars/admin.png",
+                },
+                cover: [
+                    {
+                        hide: false,
+                        filename: "admin.jpg",
+                        url: "http://localhost:7000/images/cover-images/default.jpg",
+                    },
+                ],
+            },
+        },
+
+        pageinfo: {
+            vertical: false,
+            info: {
+                star: 9,
+                like: 1231,
+                cmt: 3463,
+                share: 346,
+            },
+        },
+
+        pageinfocontent: {
+            vertical: false,
+            info: {
+                viewer: 84435,
+                blog: 7,
+                link: 1,
+                owner_avatar: "http://localhost:7000/images/avatars/admin.png",
+            },
+        },
+    },
+];
+
 interface Props {
     layout?: LayoutRender;
-    dataload: Page;
+    dataload?: Page;
 }
 
 export default function Comp({ layout }: Props) {
     const layouttmp = layouts[Math.floor(Math.random() * layouts.length)];
-    // const layouttmp = layouts[1];
 
     return (
         <Link href={"#"}>
@@ -330,6 +445,7 @@ function Layout({ layout }: any) {
 }
 
 function Render(layout: { items: any[] }) {
+    const page = pages[Math.floor(Math.random() * pages.length)];
     return (
         <Row className={cx("row")}>
             {layout.items.map((item, index) => (
@@ -343,55 +459,35 @@ function Render(layout: { items: any[] }) {
                     xl={{ ...item.colConfig?.xl }}
                     xxl={{ ...item.colConfig?.xxl }}
                 >
-                    {getComponent(item.type)}
+                    {getComponent(item.type, page)}
                 </Col>
             ))}
         </Row>
     );
 }
 
-function getComponent(type: any) {
+function getComponent(type: any, page: Page) {
     switch (type) {
         case "Background":
-            return <Background img={"/coverimg-default.png"} show={true} />;
+            return <Background img={page?.show?.images?.background?.url ?? ""} show={!page?.show?.images?.background?.hide} />;
 
         case "CoverImage":
-            return <CoverImage img={"/coverimg-default.png"} />;
+            return <CoverImage imgs={page?.show?.images?.cover ?? []} />;
 
         case "Avatar":
-            return <Avatar img={"/user-default.png"} size={{ w: 250, h: 250 }} />;
+            return <Avatar img={page?.show?.images?.avatar?.url ?? ""} size={{ w: 250, h: 250 }} />;
 
         case "Name":
-            return <Name name="YOUR NAME PAGE" />;
+            return <Name name={page?.show?.name ?? ""} />;
 
         case "Slogan":
-            return <Slogan slogan={`Your Slogan...`} />;
+            return <Slogan slogan={page?.show?.slogan ?? ""} />;
 
         case "PageInfo":
-            return (
-                <PageInfo
-                    vertical={false}
-                    info={{
-                        star: 7,
-                        like: 7,
-                        cmt: 7,
-                        share: 7,
-                    }}
-                />
-            );
+            return <PageInfo vertical={page?.pageinfo?.vertical} info={page?.pageinfo?.info ?? {}} />;
 
         case "PageInfoContent":
-            return (
-                <PageInfoContent
-                    vertical={false}
-                    info={{
-                        viewer: 7,
-                        blog: 7,
-                        link: 7,
-                        owner: "/user-default.png",
-                    }}
-                />
-            );
+            return <PageInfoContent vertical={page?.pageinfocontent?.vertical} info={page?.pageinfocontent?.info ?? {}} />;
 
         default:
             return null;

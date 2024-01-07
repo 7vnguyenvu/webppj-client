@@ -156,5 +156,9 @@
                 background-color: $body-color;
             }
         }
+
+        & > .isliked {
+            background-color: $primary-color;
+        }
     }
 }

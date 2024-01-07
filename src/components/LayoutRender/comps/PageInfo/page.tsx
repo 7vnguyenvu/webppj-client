@@ -2,17 +2,13 @@ import classNames from "classnames/bind";
 import styles from "./page.module.scss";
 import { FaCommentDots, FaHeart, FaShare, FaStar } from "react-icons/fa6";
 import { numberConvert } from "../../../../../services/numconvert";
+import { Interaction } from "../../../../../declares/interfaces";
 
 const cx = classNames.bind(styles);
 
 interface Props {
     vertical?: boolean;
-    info: {
-        star?: number;
-        like?: number;
-        cmt?: number;
-        share?: number;
-    };
+    info: Interaction;
 }
 
 export default function Comp({ vertical, info }: Props) {

@@ -9,11 +9,12 @@ import { User } from "../../../../../declares/interfaces";
 interface Props {
     user: User;
     setUser: Dispatch<SetStateAction<User | undefined>>;
+    handle_ShowFormAddBlog?: Dispatch<SetStateAction<boolean>>;
 }
 
 const cx = classNames.bind(styles);
 
-export default memo(function Comp({ user, setUser }: Props) {
+export default memo(function Comp({ user, setUser, handle_ShowFormAddBlog }: Props) {
     const userAvatar = user?.images?.avatar?.[0]?.url;
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [targetTooltip, setTargetTooltip] = useState(null);
@@ -48,8 +49,8 @@ export default memo(function Comp({ user, setUser }: Props) {
         localStorage.removeItem("account");
         handle_HideTooltip();
 
-        alert("Đã đăng xuất.");
         setUser(undefined);
+        alert("Đã đăng xuất.");
     };
 
     return (
@@ -76,7 +77,7 @@ export default memo(function Comp({ user, setUser }: Props) {
                             <Link href={"#"} className={cx("item")} onClick={() => {}}>
                                 <h6>Bài viết của tôi</h6>
                             </Link>
-                            <Link href={"#post/edit"} className={cx("item")} onClick={() => {}}>
+                            <Link href={"/post"} className={cx("item")}>
                                 <h6>Tạo bài viết</h6>
                             </Link>
                             <hr />

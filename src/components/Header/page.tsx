@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Button, Image, Spinner } from "react-bootstrap";
 import styles from "./page.module.scss";
 import { Account, User } from "../../../declares/interfaces";
@@ -10,6 +10,7 @@ import FormSignIn from "../Forms/Signin/page";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useGlobalContext } from "@/context/store";
 import useAxios from "axios-hooks";
+import { AxiosResponse } from "axios";
 
 const cx = classNames.bind(styles);
 const ServerPath = process.env.NEXT_PUBLIC_SERVER_API;
@@ -41,13 +42,50 @@ export default function Comp({ namepage, isHomePage }: Props) {
     const [formSigninOut, setFormSigninOut] = useState(false);
 
     useEffect(() => {
-        if (!user) {
-            userReFetchData();
-            if (userFetchData) {
-                setUser(userFetchData);
+        let isMounted = true;
+
+        const fetchData = async () => {
+            try {
+                if (!user) {
+                    // Perform the asynchronous operation (e.g., API call)
+                    const response: AxiosResponse<User | undefined, any> = await userReFetchData();
+
+                    if (isMounted && response && response.data) {
+                        // Extract the user data from the Axios response
+                        const userData: User = response.data;
+
+                        // Update the state with the extracted user data
+                        setUser(userData);
+                    }
+                }
+            } catch (error: any) {
+                if (error.name === "AbortError") {
+                    // Handle cancellation error (e.g., log or display a message)
+                    console.error("Operation was canceled:", error);
+                } else {
+                    // Handle other errors
+                    console.error("An error occurred:", error);
+                }
             }
-        }
+        };
+
+        fetchData();
+
+        return () => {
+            // Cleanup function to handle component unmounting
+            isMounted = false;
+            // Cancel any ongoing operations (if possible)
+            // For instance, using AbortController.abort() or CancelToken
+        };
     }, [userFetchData]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         userReFetchData();
+    //         if (userFetchData) {
+    //             setUser(userFetchData);
+    //         }
+    //     }
+    // }, [userFetchData]);
 
     const handle_ShowFormSignin = () => {
         setShowFormSignin(true);

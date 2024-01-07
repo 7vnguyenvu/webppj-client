@@ -9,11 +9,10 @@ import { useEffect, useState } from "react";
 
 import FormAddBlog from "@/components/Forms/AddBlog/page";
 import Header from "@/components/Header/page";
-import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 
-import HomeIntro from "../components/HomeIntro/page";
-import ContentFetching from "../components/ContentFetching/page";
-import { Blog } from "../../declares/interfaces";
+import HomeIntro from "@/components/HomeIntro/page";
+import ContentFetching from "@/components/ContentFetching/page";
+import { Blog, User } from "../../declares/interfaces";
 import { useGlobalContext } from "@/context/store";
 import Link from "next/link";
 import { IoSearch } from "react-icons/io5";
@@ -42,16 +41,23 @@ const tabs = [
 
 export default function Home() {
     const { user } = useGlobalContext();
+    const [search, setSearch] = useState<string>("");
 
     const [{ data, loading, error }, refetch] = useAxios<Blog[]>({
         baseURL: ServerPath,
         url: `/${tabs?.[0]?.api}`,
     });
 
+    const [{ data: usersdata, loading: usersloading, error: userserror }, usersRefetch] = useAxios<User[]>({
+        baseURL: ServerPath,
+        url: `/users`,
+    });
+
     const [tabData, setTabData] = useState<Record<string, any>>();
     const [activeTab, setActiveTab] = useState(tabs?.[0]?.api);
 
     const [showFormAddBlog, setShowFormAddBlog] = useState(false);
+    const [isDoneAddBlog, setIsDoneAddBlog] = useState(false);
     const [formAddBlogOut, setFormAddBlogOut] = useState(false);
 
     const renderTooltip = (name: string) => <Tooltip>{name}</Tooltip>;
@@ -61,8 +67,8 @@ export default function Home() {
         else window.scrollTo(0, y);
     };
 
-    const handle_ChangeTab = (tab: any) => {
-        if (tab.api === activeTab) {
+    const handle_ChangeTab = (tabname: any) => {
+        if (tabname === activeTab) {
             scrollTo(0);
             refetch({
                 url: `/${activeTab}`,
@@ -76,11 +82,16 @@ export default function Home() {
                 },
             }));
 
-            setActiveTab(tab.api);
+            setActiveTab(tabname);
         }
     };
 
     const handle_ShowFormAddBlog = () => {
+        if (!user) {
+            alert("Hãy đăng nhập!");
+            return;
+        }
+
         setShowFormAddBlog(true);
         setFormAddBlogOut(false);
     };
@@ -91,6 +102,29 @@ export default function Home() {
             setShowFormAddBlog(false);
         }, 300);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (search !== "") {
+                    const response = await usersRefetch({
+                        url: `/users/search?key=${search}`,
+                        method: "post",
+                    });
+                    // Further processing with the response
+                } else {
+                    const response = await usersRefetch({
+                        url: `/users`,
+                        method: "get",
+                    });
+                }
+            } catch (error) {
+                // Handle error appropriately
+            }
+        };
+
+        fetchData();
+    }, [search, usersRefetch]);
 
     useEffect(() => {
         if (tabData?.[activeTab!] && data) {
@@ -126,6 +160,13 @@ export default function Home() {
         }
     }, [activeTab]);
 
+    useEffect(() => {
+        if (isDoneAddBlog) {
+            handle_ChangeTab("blogs");
+            setIsDoneAddBlog(false);
+        }
+    }, [isDoneAddBlog]);
+
     return (
         <>
             <Header isHomePage={true}></Header>
@@ -151,7 +192,7 @@ export default function Home() {
                                         <Button
                                             className={`${activeTab === tab.api ? cx("active") : ""}`}
                                             onClick={() => {
-                                                handle_ChangeTab(tab);
+                                                handle_ChangeTab(tab.api);
                                             }}
                                         >
                                             {tab.icon}
@@ -160,16 +201,29 @@ export default function Home() {
                                 ))}
                         </Col>
                         <Col lg={2} className={cx("roles")}>
-                            <input type="text" placeholder="Search.." />
+                            <input type="text" placeholder="Search.." value={search} onChange={(e) => setSearch(e.target.value)} />
                             <IoSearch />
                         </Col>
                     </Stack>
                     <Stack direction="horizontal" className={cx("body")}>
                         <Col md={2} className={cx("sidebar")}>
-                            <span>
-                                <FaUserFriends />
-                                <p>Bạn bè</p>
-                            </span>
+                            <h5>Người dùng</h5>
+
+                            {usersloading && (
+                                <div className="d-flex justify-content-start mt-4">
+                                    <Spinner variant="success" animation="border" />
+                                </div>
+                            )}
+                            {usersdata &&
+                                usersdata.map(
+                                    (u, index) =>
+                                        u.user_id !== user?.user_id && (
+                                            <Link href={`/${u.info?.nick_name}`} key={index}>
+                                                <Image src={u.images?.avatar?.[0].url} alt={u.images?.avatar?.[0].filename} />
+                                                <p>{u.info?.full_name}</p>
+                                            </Link>
+                                        )
+                                )}
                         </Col>
                         <Col xs={12} md={9} lg={5} className={cx("main", "mx-auto")}>
                             {loading && (
@@ -191,7 +245,7 @@ export default function Home() {
             {showFormAddBlog && (
                 <>
                     <div className={cx("overlay", { formOut: formAddBlogOut })}></div>
-                    <FormAddBlog formOut={formAddBlogOut} setShowForm={handle_HideFormAddBlog} />
+                    <FormAddBlog formOut={formAddBlogOut} setShowForm={handle_HideFormAddBlog} setIsDoneAddBlog={setIsDoneAddBlog} />
                 </>
             )}
         </>
